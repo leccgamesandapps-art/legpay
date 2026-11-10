@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0070f3" />
+  <meta name="description" content="LEGpay - Buy mobile load via GCash. No website convenience fee." />
+  <title>LEGpay — Buy Load with GCash</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">
+      <span class="logo-icon">₱</span>
+      <span class="logo-text">LEGpay</span>
+    </div>
+    <div class="header-badge">No Convenience Fee</div>
+  </header>
+
+  <!-- Main App -->
+  <main id="app">
+    <!-- SCREEN 1: Select Network + Number -->
+    <section id="screen-select" class="screen active">
+      <div class="card">
+        <h1>Buy Load</h1>
+        <p class="subtitle">Choose network and enter mobile number</p>
+
+        <div class="network-grid" id="network-grid">
+          <button class="network-btn" data-network="Globe" data-color="#0057A0">
+            <div class="net-logo globe">G</div>
+            <span>Globe</span>
+          </button>
+          <button class="network-btn" data-network="TM" data-color="#E31C23">
+            <div class="net-logo tm">TM</div>
+            <span>TM</span>
+          </button>
+          <button class="network-btn" data-network="Smart" data-color="#00A651">
+            <div class="net-logo smart">S</div>
+            <span>Smart</span>
+          </button>
+          <button class="network-btn" data-network="TNT" data-color="#F7941D">
+            <div class="net-logo tnt">TNT</div>
+            <span>TNT</span>
+          </button>
+          <button class="network-btn" data-network="DITO" data-color="#7B2D8E">
+            <div class="net-logo dito">D</div>
+            <span>DITO</span>
+          </button>
+          <button class="network-btn" data-network="GOMO" data-color="#00B4D8">
+            <div class="net-logo gomo">GO</div>
+            <span>GOMO</span>
+          </button>
+        </div>
+
+        <div class="input-group">
+          <label for="mobile-number">Mobile Number</label>
+          <div class="phone-input">
+            <span class="prefix">+63</span>
+            <input
+              type="tel"
+              id="mobile-number"
+              placeholder="9XX XXX XXXX"
+              maxlength="11"
+              inputmode="numeric"
+              autocomplete="tel"
+            />
+          </div>
+          <p class="hint" id="number-hint">Select a network first</p>
+        </div>
+
+        <button class="btn-primary" id="btn-continue" disabled>
+          Continue
+        </button>
+      </div>
+    </section>
+
+    <!-- SCREEN 2: Load Selection -->
+    <section id="screen-load" class="screen">
+      <div class="card">
+        <button class="back-btn" id="back-to-select">← Back</button>
+        
+        <div class="selected-info">
+          <div class="selected-network" id="selected-network-display"></div>
+          <div class="selected-number" id="selected-number-display"></div>
+        </div>
+
+        <h2>Choose Load</h2>
+
+        <!-- Categories -->
+        <div class="tabs" id="load-tabs">
+          <button class="tab active" data-tab="recommended">Recommended</button>
+          <button class="tab" data-tab="regular">Regular</button>
+          <button class="tab" data-tab="promo">Promos</button>
+          <button class="tab" data-tab="data">Data</button>
+        </div>
+
+        <div class="load-list" id="load-list">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN 3: Payment -->
+    <section id="screen-payment" class="screen">
+      <div class="card">
+        <button class="back-btn" id="back-to-load">← Back</button>
+
+        <h2>Pay with GCash</h2>
+
+        <div class="order-summary">
+          <div class="summary-row">
+            <span>Network</span>
+            <strong id="pay-network"></strong>
+          </div>
+          <div class="summary-row">
+            <span>Number</span>
+            <strong id="pay-number"></strong>
+          </div>
+          <div class="summary-row">
+            <span>Load</span>
+            <strong id="pay-load"></strong>
+          </div>
+          <div class="summary-row total">
+            <span>Total Amount</span>
+            <strong id="pay-amount"></strong>
+          </div>
+          <div class="fee-note">
+            <span class="check">✓</span> No website convenience fee<br>
+            <span class="muted">Only GCash standard fees (if any) apply</span>
+          </div>
+        </div>
+
+        <div class="payment-methods">
+          <button class="pay-option" id="pay-direct">
+            <div class="pay-icon gcash">G</div>
+            <div class="pay-info">
+              <strong>Pay Directly</strong>
+              <span>If GCash is connected / installed</span>
+            </div>
+            <span class="arrow">→</span>
+          </button>
+
+          <button class="pay-option" id="pay-qr">
+            <div class="pay-icon qr">QR</div>
+            <div class="pay-info">
+              <strong>Pay with QR Code</strong>
+              <span>Scan using GCash app</span>
+            </div>
+            <span class="arrow">→</span>
+          </button>
+        </div>
+
+        <p class="flow-note">
+          Flow: <strong>GCash → LEGpay → Number</strong>
+        </p>
+      </div>
+    </section>
+
+    <!-- SCREEN 4: QR Payment -->
+    <section id="screen-qr" class="screen">
+      <div class="card">
+        <button class="back-btn" id="back-to-payment">← Back</button>
+
+        <h2>Scan to Pay</h2>
+        <p class="subtitle">Open GCash → Scan QR</p>
+
+        <div class="qr-container">
+          <div class="qr-placeholder" id="qr-code">
+            <div class="qr-inner">
+              <div class="qr-logo">GCash</div>
+              <canvas id="qr-canvas" width="200" height="200"></canvas>
+            </div>
+          </div>
+          <p class="qr-amount" id="qr-amount-display"></p>
+          <p class="qr-ref">Ref: <span id="qr-ref"></span></p>
+        </div>
+
+        <div class="qr-instructions">
+          <ol>
+            <li>Open your <strong>GCash</strong> app</li>
+            <li>Tap <strong>Scan QR</strong></li>
+            <li>Point camera at the code above</li>
+            <li>Confirm payment</li>
+          </ol>
+        </div>
+
+        <button class="btn-secondary" id="btn-simulate-paid">
+          I’ve Paid (Demo)
+        </button>
+      </div>
+    </section>
+
+    <!-- SCREEN 5: Success -->
+    <section id="screen-success" class="screen">
+      <div class="card success-card">
+        <div class="success-icon">✓</div>
+        <h2>Load Sent!</h2>
+        <p class="subtitle">Your load has been processed</p>
+
+        <div class="receipt">
+          <div class="receipt-row">
+            <span>To</span>
+            <strong id="success-number"></strong>
+          </div>
+          <div class="receipt-row">
+            <span>Network</span>
+            <strong id="success-network"></strong>
+          </div>
+          <div class="receipt-row">
+            <span>Amount</span>
+            <strong id="success-amount"></strong>
+          </div>
+          <div class="receipt-row">
+            <span>Reference</span>
+            <strong id="success-ref"></strong>
+          </div>
+          <div class="receipt-row">
+            <span>Date</span>
+            <strong id="success-date"></strong>
+          </div>
+        </div>
+
+        <p class="success-note">
+          No convenience fee charged by LEGpay.<br>
+          Load should reflect within a few minutes.
+        </p>
+
+        <button class="btn-primary" id="btn-new">Buy Another Load</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>LEGpay • Demo only • Not a real payment processor</p>
+    <p class="small">GCash is a registered trademark of G-Xchange, Inc.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
